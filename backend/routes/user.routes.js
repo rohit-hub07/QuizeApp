@@ -18,7 +18,7 @@ authRouter.post("/login", loginController);
 authRouter.get("/logout", isAuthenticated, logoutController);
 authRouter.get("/profile", isAuthenticated, profileController);
 authRouter.post("/forget-password", isAuthenticated, forgetPasswordController);
-authRouter.post(
+authRouter.put(
   "/reset-password/:token",
   isAuthenticated,
   resetPasswordController

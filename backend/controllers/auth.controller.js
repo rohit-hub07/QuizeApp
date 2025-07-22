@@ -234,6 +234,8 @@ export const forgetPasswordController = async (req, res) => {
 
     user.resetPasswordToken = token;
     user.resetPasswordExpiry = Date.now() + 10 * 60 * 1000;
+    await user.save();
+    console.log("user inside of forget pass: ", user);
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: 587,

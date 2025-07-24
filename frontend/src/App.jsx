@@ -23,7 +23,7 @@ import NotFound from "./pages/NotFound";
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/">
         <Layout>
           <Routes>
             {/* Public Routes */}

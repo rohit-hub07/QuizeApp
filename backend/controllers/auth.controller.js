@@ -230,6 +230,13 @@ export const forgetPasswordController = async (req, res) => {
       });
     }
     const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        message: "No account found with this email address",
+        success: false,
+      });
+    }
+
     const token = crypto.randomBytes(32).toString("hex");
 
     user.resetPasswordToken = token;
@@ -249,10 +256,15 @@ export const forgetPasswordController = async (req, res) => {
     const mailOptions = {
       from: `Quize App ${process.env.SMTP_SENDER}`,
       to: user.email,
-      subject: "Verify Your Email",
-      html: `<h2>Welcome to QuizeWeb, ${user.name}!</h2>
-             <p>Please click the link below to reset your password:</p>
-             <a href="${process.env.BASE_URL}/auth/reset-password/${token}">Reset Password</a>`,
+      subject: "Reset Your Password",
+      html: `<h2>Password Reset Request</h2>
+             <p>Hello ${user.name},</p>
+             <p>We received a request to reset your password. Please click the link below to reset your password:</p>
+             <a href="${
+               process.env.FRONTEND_URL || "http://localhost:5173"
+             }/reset-password/${token}" style="display: inline-block; padding: 10px 20px; background-color: #3B82F6; color: white; text-decoration: none; border-radius: 5px;">Reset Password</a>
+             <p>This link will expire in 10 minutes.</p>
+             <p>If you didn't request this password reset, please ignore this email.</p>`,
     };
     await transporter.sendMail(mailOptions);
     res.status(200).json({
@@ -289,10 +301,12 @@ export const resetPasswordController = async (req, res) => {
       });
     }
     user.password = password;
-    await user.save();
     user.resetPasswordToken = null;
+    user.resetPasswordExpiry = null;
+    await user.save();
+
     res.status(200).json({
-      message: "Passoword reset successful",
+      message: "Password reset successful",
       success: true,
     });
   } catch (error) {

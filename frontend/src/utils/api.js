@@ -1,7 +1,10 @@
 import axios from "axios";
 
-// const API_BASE_URL = "http://localhost:3000";
-const API_BASE_URL = "https://quizeapp-backend-3ma3.onrender.com";
+// Use environment variable with fallback
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+
+console.log("API Base URL:", API_BASE_URL);
 
 const api = axios.create({
   baseURL: API_BASE_URL,

@@ -56,7 +56,9 @@ export const registerUserController = async (req, res) => {
       subject: "Verify Your Email",
       html: `<h2>Welcome to QuizeWeb, ${newUser.name}!</h2>
              <p>Please click the link below to verify your email:</p>
-             <a href="${process.env.BASE_URL}/auth/verify/${token}">Verify Email</a>`,
+             <a href="${process.env.FRONTEND_URL}/auth/verify/${token}" style="display: inline-block; padding: 10px 20px; background-color: #3B82F6; color: white; text-decoration: none; border-radius: 5px;">Verify Email</a>
+             <p>This link will expire in 24 hours.</p>
+             <p>If you didn't request this verification, please ignore this email.</p>`,
     };
     await transporter.sendMail(mailOptions);
     res.status(201).json({
@@ -260,9 +262,7 @@ export const forgetPasswordController = async (req, res) => {
       html: `<h2>Password Reset Request</h2>
              <p>Hello ${user.name},</p>
              <p>We received a request to reset your password. Please click the link below to reset your password:</p>
-             <a href="${
-               process.env.FRONTEND_URL || "http://localhost:5173"
-             }/reset-password/${token}" style="display: inline-block; padding: 10px 20px; background-color: #3B82F6; color: white; text-decoration: none; border-radius: 5px;">Reset Password</a>
+             <a href="${process.env.FRONTEND_URL}/reset-password/${token}" style="display: inline-block; padding: 10px 20px; background-color: #3B82F6; color: white; text-decoration: none; border-radius: 5px;">Reset Password</a>
              <p>This link will expire in 10 minutes.</p>
              <p>If you didn't request this password reset, please ignore this email.</p>`,
     };
@@ -367,8 +367,9 @@ export const resendVerificationController = async (req, res) => {
       subject: "Verify Your Email - Quiz App",
       html: `<h2>Welcome to QuizeWeb, ${user.name}!</h2>
              <p>Please click the link below to verify your email:</p>
-             <a href="${process.env.BASE_URL}/auth/verify/${token}">Verify Email</a>
-             <p>This link will expire in 24 hours.</p>`,
+             <a href="${process.env.FRONTEND_URL}/auth/verify/${token}" style="display: inline-block; padding: 10px 20px; background-color: #3B82F6; color: white; text-decoration: none; border-radius: 5px;">Verify Email</a>
+             <p>This link will expire in 24 hours.</p>
+             <p>If you didn't request this verification, please ignore this email.</p>`,
     };
 
     await transporter.sendMail(mailOptions);

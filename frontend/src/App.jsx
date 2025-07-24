@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext";
 import Layout from "./components/Layout";
@@ -23,11 +23,10 @@ import NotFound from "./pages/NotFound";
 function App() {
   return (
     <AuthProvider>
-      <Router basename="/">
-        <Layout>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
+      <Layout>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -117,7 +116,7 @@ function App() {
             },
           }}
         />
-      </Router>
+      </Layout>
     </AuthProvider>
   );
 }

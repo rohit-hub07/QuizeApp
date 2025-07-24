@@ -51,7 +51,7 @@ export const registerUserController = async (req, res) => {
     });
     console.log("SMTP: ", process.env.SMTP_USER);
     const mailOptions = {
-      from: `Quize App${process.env.SMTP_SENDER}`,
+      from: `Quize App ${process.env.SMTP_SENDER}`,
       to: newUser.email,
       subject: "Verify Your Email",
       html: `<h2>Welcome to QuizeWeb, ${newUser.name}!</h2>
@@ -163,7 +163,7 @@ export const loginController = async (req, res) => {
   } catch (error) {
     console.log("Error logging the user: ", error);
     return res.status(500).json({
-      message: "Somethign went wrong!",
+      message: "Something went wrong!",
       success: false,
     });
   }
@@ -299,6 +299,74 @@ export const resetPasswordController = async (req, res) => {
     console.log("Error reseting the password: ", error);
     return res.status(500).json({
       message: "Something went wrong!",
+      success: false,
+    });
+  }
+};
+
+export const resendVerificationController = async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      return res.status(401).json({
+        message: "Please login first",
+        success: false,
+      });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({
+        message: "Email is already verified",
+        success: false,
+      });
+    }
+
+    // Generate new verification token
+    const token = crypto.randomBytes(32).toString("hex");
+    user.verificationToken = token;
+    await user.save();
+
+    // Send verification email
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: `Quize App ${process.env.SMTP_SENDER}`,
+      to: user.email,
+      subject: "Verify Your Email - Quiz App",
+      html: `<h2>Welcome to QuizeWeb, ${user.name}!</h2>
+             <p>Please click the link below to verify your email:</p>
+             <a href="${process.env.BASE_URL}/auth/verify/${token}">Verify Email</a>
+             <p>This link will expire in 24 hours.</p>`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({
+      message: "Verification email sent successfully! Please check your email.",
+      success: true,
+    });
+  } catch (error) {
+    console.log("Error resending verification email: ", error);
+    return res.status(500).json({
+      message: "Failed to send verification email. Please try again later.",
       success: false,
     });
   }

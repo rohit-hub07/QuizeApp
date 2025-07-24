@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import VerifyEmail from "./pages/VerifyEmail";
 import Quizzes from "./pages/Quizzes";
 import QuizTaking from "./pages/QuizTaking";
 import CreateQuiz from "./pages/CreateQuiz";
@@ -31,6 +32,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/auth/verify/:token" element={<VerifyEmail />} />
 
             {/* Protected Routes */}
             <Route

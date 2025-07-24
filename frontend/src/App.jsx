@@ -96,8 +96,6 @@ function App() {
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </Layout>
-
         {/* Toast Notifications */}
         <Toaster
           position="top-right"

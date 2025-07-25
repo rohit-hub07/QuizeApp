@@ -100,12 +100,19 @@ export const verificationController = async (req, res) => {
       process.env.SECRET,
       { expiresIn: "24h" }
     );
+    // res.cookie("token", tkn, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production", // false in dev
+    //   sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    //   domain: "quizeapp-backend-3ma3.onrender.com",
+    //   maxAge: 24 * 60 * 60 * 1000,
+    // });
+
     res.cookie("token", tkn, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // false in dev
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-      domain: "quizeapp-backend-3ma3.onrender.com",
-      maxAge: 24 * 60 * 60 * 1000,
+      secure: true,
+      sameSite: "None",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
     res.status(201).json({
@@ -151,12 +158,19 @@ export const loginController = async (req, res) => {
       process.env.SECRET,
       { expiresIn: "24h" }
     );
+    // res.cookie("token", tkn, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production", // false in dev
+    //   sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    //   domain: "quizeapp-backend-3ma3.onrender.com",
+    //   maxAge: 24 * 60 * 60 * 1000,
+    // });
+
     res.cookie("token", tkn, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // false in dev
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-      domain: "quizeapp-backend-3ma3.onrender.com",
-      maxAge: 24 * 60 * 60 * 1000,
+      secure: true,
+      sameSite: "None",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
     res.status(200).json({
@@ -175,13 +189,21 @@ export const loginController = async (req, res) => {
 
 export const logoutController = async (req, res) => {
   try {
-    res.cookie("token", "", {
+    // res.cookie("token", "", {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    //   domain: "quizeapp-backend-3ma3.onrender.com",
+    //   maxAge: 24 * 60 * 60 * 1000,
+    // });
+
+    res.cookie("token", " ", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-      domain: "quizeapp-backend-3ma3.onrender.com",
-      maxAge: 24 * 60 * 60 * 1000,
+      secure: true,
+      sameSite: "None",
+      maxAge: 24 * 60 * 60 * 1000, 
     });
+
     res.status(200).json({
       message: "User logged out successfully",
       success: true,
